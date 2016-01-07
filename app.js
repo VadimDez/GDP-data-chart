@@ -16,7 +16,7 @@
   }());
 
   function createChart(data) {
-    var margin = {top: 20, right: 30, bottom: 30, left: 40};
+    var margin = {top: 20, right: 30, bottom: 30, left: 50};
     var containerWidth = 960;
     var containerHeight = 500;
     var width = containerWidth - margin.left - margin.right;
@@ -41,7 +41,6 @@
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var format = d3.time.format("%Y-%m-%d");
     var xAxis = d3.svg.axis()
       .scale(scaleX)
       .tickFormat(d3.time.format('%Y'))
@@ -61,7 +60,7 @@
       .call(xAxis)
       .append('text')
       .attr('x', 0)
-      .attr('y', 25)
+      .attr('y', 18)
       .text('Year');
 
     $chart.append('g')
@@ -92,7 +91,7 @@
         return $tooltip.style('visibility', 'visible');
       })
       .on('mousemove', function (data) {
-        d3.select(this).style('fill', 'red');
+        d3.select(this).classed('active', true);
         $tooltip.select('.date').text(data[0]);
         $tooltip.select('.value').text(data[1]);
 
@@ -100,7 +99,7 @@
           .style('left', (event.pageX + 10) + 'px');
       })
       .on('mouseleave', function () {
-        d3.select(this).style('fill', 'steelblue');
+        d3.select(this).classed('active', false);
         return $tooltip.style('visibility', 'hidden');
       });
 

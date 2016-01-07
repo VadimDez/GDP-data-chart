@@ -1,5 +1,59 @@
+html {
+    padding: 0;
+}
+body {
+    background-color: #3D484C;
+    font-family: 'Roboto', sans-serif;
+}
+
+.container, header, footer {
+    width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.container {
+    height: 500px;
+}
+
+header, footer {
+    text-align: center;
+    background-color: #FFFFFF;
+
+}
+header {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    font-size: 20px;
+}
+
+footer {
+    padding-top: 20px;
+    padding-bottom:20px;
+}
+footer a {
+    color: black;
+    font-size: 12px;
+}
+
+.chart {
+    width: 960px;
+    height: 500px;
+    background-color: rgba(255, 255, 255, 0.2);
+
+
+    background-image: url('http://wallpaperswa.com/thumbnails/detail/20121026/green%20blue%20minimalistic%20gaussian%20blur%20blurred%202560x1440%20wallpaper_wallpaperswa.com_5.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 .chart .bar {
-    fill: steelblue;
+    fill: #51BDAD;
+}
+.chart .bar.active {
+    fill: #addce2;
+}
+.chart text {
+    fill: #fff;
 }
 
 .axis text {
@@ -9,7 +63,7 @@
 .axis path,
 .axis line {
     fill: none;
-    stroke: #000;
+    stroke: #FFFFFF;
     shape-rendering: crispEdges;
 }
 
