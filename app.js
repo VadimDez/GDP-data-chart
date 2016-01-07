@@ -26,15 +26,14 @@
     var max = d3.max(data, function (array) {
       return array[1];
     });
+
     var scaleY = d3.scale.linear()
       .domain([0, max])
       .range([height, 0]);
 
-    var scaleX = d3.scale.ordinal()
-      .rangeRoundBands([0, width], .1)
-      .domain(data.map(function (d) {
-        return d[0];
-      }));
+    var scaleX = d3.time.scale()
+      .rangeRound([0, width])
+      .domain([new Date(data[0][0]), d3.time.year.offset(new Date(data[data.length - 1][0]), 1)]);
 
     var $chart = d3.select('.chart')
       .attr("width", containerWidth)
@@ -42,22 +41,28 @@
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    var format = d3.time.format("%Y-%m-%d");
     var xAxis = d3.svg.axis()
       .scale(scaleX)
-      .tickFormat(function (d) {
-        return d.substr(0, 4);
-      })
-      .tickSize(10)
+      .tickFormat(d3.time.format('%Y'))
+      .tickSize(5)
+      .tickPadding(6)
       .orient("bottom");
 
     var yAxis = d3.svg.axis()
       .scale(scaleY)
       .orient("left");
 
+    var $tooltip = d3.select('.tooltip');
+
     $chart.append('g')
       .attr('class', 'axis x-axis')
       .attr('transform', 'translate(0,' + height + ')')
-      .call(xAxis);
+      .call(xAxis)
+      .append('text')
+      .attr('x', 0)
+      .attr('y', 25)
+      .text('Year');
 
     $chart.append('g')
       .attr('class', 'axis y-axis')
@@ -74,7 +79,7 @@
     $bar.enter().append("rect")
       .attr("class", "bar")
       .attr("x", function(d) {
-        return scaleX(d[0]);
+        return scaleX(new Date(d[0]));
       })
       .attr("y", function(d) {
         return scaleY(d[1]);
@@ -82,7 +87,22 @@
       .attr("height", function(d) {
         return height - scaleY(d[1]);
       })
-      .attr("width", scaleX.rangeBand());
+      .attr("width", barWidth + 1)
+      .on('mouseover', function (d) {
+        return $tooltip.style('visibility', 'visible');
+      })
+      .on('mousemove', function (data) {
+        d3.select(this).style('fill', 'red');
+        $tooltip.select('.date').text(data[0]);
+        $tooltip.select('.value').text(data[1]);
+
+        return $tooltip.style('top', (event.pageY) + 'px')
+          .style('left', (event.pageX + 10) + 'px');
+      })
+      .on('mouseleave', function () {
+        d3.select(this).style('fill', 'steelblue');
+        return $tooltip.style('visibility', 'hidden');
+      });
 
     $bar.exit().remove();
   }
